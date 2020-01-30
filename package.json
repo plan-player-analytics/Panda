@@ -4,7 +4,7 @@
   "description": "Player Analytics Discord Assistant or Panda for short",
   "main": "main.js",
   "scripts": {
-    "test": "test"
+    "main": "node main.js"
   },
   "repository": {
     "type": "git",
@@ -22,6 +22,7 @@
   "homepage": "https://github.com/plan-player-analytics/Panda#readme",
   "dependencies": {
     "discord.js": "^11.5.1",
-    "mz": "^2.7.0"
+    "mz": "^2.7.0",
+    "npm": "^6.13.7"
   }
 }

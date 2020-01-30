@@ -1,7 +1,7 @@
 /* Modified from https://github.com/LuckPerms/clippy/blob/master/modules/no_ping.js */
-import { staff_roles } from "../data.json";
+const data = require("../data.json");
 
-export default function(client) {
+module.exports = function(client) {
   client.on("message", async msg => {
     const author = msg.author;
     const channel = msg.channel;
@@ -14,7 +14,7 @@ export default function(client) {
     if (channel.type !== "text") return;
     if (mentions.members.size === 0) return;
 
-    const senderIsStaff = msg.member.roles.some(role => staff_roles.indexOf(role.name) !== -1);
+    const senderIsStaff = msg.member.roles.some(role => data.staff_roles.indexOf(role.name) !== -1);
     if (senderIsStaff) {
         return;
     }
