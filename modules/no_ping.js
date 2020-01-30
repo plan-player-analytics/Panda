@@ -14,10 +14,10 @@ module.exports = function(client) {
     if (channel.type !== "text") return;
     if (mentions.members.size === 0) return;
 
-    // const senderIsStaff = msg.member.roles.some(role => data.staff_roles.indexOf(role.name) !== -1);
-    // if (senderIsStaff) {
-    //     return;
-    // }
+    const senderIsStaff = msg.member.roles.some(role => data.staff_roles.indexOf(role.name) !== -1);
+    if (senderIsStaff) {
+        return;
+    }
 
     // Find if the pinged users have recently sent message
     channel
