@@ -23,7 +23,9 @@ module.exports = function(client) {
     channel
       .fetchMessages({ before: msg.id, limit: 25 })
       .then(messages => {
-        const replying = messages.filter(message => mentions.members.includes(message.author)).length === mentions.members.length;
+        const foundInHistory = mentions.members.filter(member => messages.some(oldMsg => oldMsg.author.id === member.id)).length;
+        const mentioned = mentions.members.length
+        const replying = foundInHistory === mentioned;
         if (!replying) {
             msg.channel.send(
                 `Hey ${msg.author.username}! Please don't tag others unless replying.`
