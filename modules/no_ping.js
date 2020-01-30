@@ -19,11 +19,11 @@ module.exports = function(client) {
         return;
     }
 
-    // Find any messages that mention the user
+    // Find if the pinged users have recently sent message
     channel
       .fetchMessages({ before: msg.id, limit: 25 })
       .then(messages => {
-        const replying = messages.filter(message => mentions.members.includes(message.author)).length == mentions.members.size;
+        const replying = messages.filter(message => mentions.members.includes(message.author)).length === mentions.members.length;
         if (!replying) {
             msg.channel.send(
                 `Hey ${msg.author.username}! Please don't tag others unless replying.`
