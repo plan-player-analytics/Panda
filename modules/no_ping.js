@@ -23,13 +23,14 @@ module.exports = function(client) {
     channel
       .fetchMessages({ before: msg.id, limit: 25 })
       .then(messages => {
-        const foundInHistory = mentions.members.filter(member => messages.some(oldMsg => oldMsg.author.id === member.id)).length;
-        const mentioned = mentions.members.length
+        const foundInHistory = mentions.members.filter(member => messages.some(oldMsg => oldMsg.author.id === member.id)).size;
+        const mentioned = mentions.members.size
         const replying = foundInHistory === mentioned;
         if (!replying) {
             msg.channel.send(
                 `Hey ${msg.author.username}! Please don't tag others unless replying.`
             );
+            console.log(`Notified  ${msg.author.username} about pinging`)
         }
       })
       .catch(console.error);
