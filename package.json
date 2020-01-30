@@ -1,0 +1,27 @@
+{
+  "name": "panda",
+  "version": "1.0.0",
+  "description": "Player Analytics Discord Assistant or Panda for short",
+  "main": "main.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/plan-player-analytics/Panda.git"
+  },
+  "keywords": [
+    "discord",
+    "bot"
+  ],
+  "author": "Rsl1122",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/plan-player-analytics/Panda/issues"
+  },
+  "homepage": "https://github.com/plan-player-analytics/Panda#readme",
+  "dependencies": {
+    "discord.js": "^11.5.1",
+    "mz": "^2.7.0"
+  }
+}
