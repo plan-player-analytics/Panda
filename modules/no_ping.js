@@ -19,12 +19,16 @@ module.exports = function(client) {
         return;
     }
 
+    const currentDate = new Date().getTime();
     // Find if the pinged users have recently sent message
     channel
       .fetchMessages({ before: msg.id, limit: 25 })
       .then(messages => {
+          return messages.filter(message => currentDate - message.createdAt.getTime() <= 216000); // 60 hours, 2.5 days 
+      })
+      .then(messages => {
         const foundInHistory = mentions.members.filter(member => messages.some(oldMsg => oldMsg.author.id === member.id)).size;
-        const mentioned = mentions.members.size
+        const mentioned = mentions.members.filter(member => !member.user.username.includes('@me')).size;
         const replying = foundInHistory === mentioned;
         if (!replying) {
             msg.channel.send(
