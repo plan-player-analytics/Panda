@@ -28,7 +28,7 @@ module.exports = function(client) {
       })
       .then(messages => {
         const foundInHistory = mentions.members.filter(member => messages.some(oldMsg => oldMsg.author.id === member.id)).size;
-        const mentioned = mentions.members.filter(member => !member.user.username.includes('@me')).size;
+        const mentioned = mentions.members.filter(member => !member.nickname || !member.nickname.includes('@me')).size;
         const replying = foundInHistory === mentioned;
         if (!replying) {
             msg.channel.send(
