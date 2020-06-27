@@ -27,13 +27,8 @@ module.exports = function (client) {
 
         const currentDate = new Date().getTime();
         // Find if the pinged users have recently sent message
-        console.log(currentDate);
         channel
             .fetchMessages({before: msg.id, limit: 50})
-            .then(messages => {
-                messages.forEach(message => console.log(message.createdTimestamp))
-                return messages;
-            })
             .then(filterRecent(currentDate))
             .then(messages => {
                 const foundInHistory = mentions.members
