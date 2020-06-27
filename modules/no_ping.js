@@ -31,7 +31,7 @@ module.exports = function (client) {
         channel
             .fetchMessages({before: msg.id, limit: 50})
             .then(messages => {
-                messages.forEach(message => console.log(message.createdAt))
+                messages.forEach(message => console.log(message.createdTimestamp))
                 return messages;
             })
             .then(filterRecent(currentDate))
