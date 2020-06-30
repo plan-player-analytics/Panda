@@ -7,42 +7,56 @@ function filterRecent(currentDate) {
     };
 }
 
+function isStaff(member) {
+    return member.roles.some(role => data.staff_roles.indexOf(role.name) !== -1);
+}
+
 module.exports = function (client) {
     client.on("message", async msg => {
         const author = msg.author;
         const channel = msg.channel;
-        const mentions = msg.mentions;
 
-        // Ignore bots
+        // Ignore messages from non-text channels
+        if (channel.type !== "text") return;
+
+        // Bots can mention
         if (author.bot) return;
 
-        // Ignore messages that don't mention anyone
-        if (channel.type !== "text") return;
-        if (mentions.members.size === 0) return;
+        // Webhooks don't have members, and they are trusted to be respectful
+        if (msg.webhookID != null) return;
 
-        const senderIsStaff = msg.member.roles.some(role => data.staff_roles.indexOf(role.name) !== -1);
-        if (senderIsStaff) {
-            return;
-        }
+        // Staff can mention
+        if (isStaff(msg.member)) return;
+
+        // Get the map of people who were mentioned in the message
+        const mentioned = msg.mentions.members
+            .filter(member => !member.user.bot); // Filter out bots, they don't have feelings
+
+        // Nobody was mentioned
+        if (mentioned.size === 0) return;
 
         const currentDate = new Date().getTime();
-        // Find if the pinged users have recently sent message
         channel
             .fetchMessages({before: msg.id, limit: 50})
             .then(filterRecent(currentDate))
             .then(messages => {
-                const foundInHistory = mentions.members
-                    .filter(member => messages.some(oldMsg => oldMsg.author.id === member.id))
-                    .size;
-                const mentioned = mentions.members
-                    .filter(member => !member.nickname || !member.nickname.includes('@me'))
-                    .size;
-                const replying = foundInHistory === mentioned;
-                if (!replying) {
+                messages.forEach(msg => {
+                    // if (isStaff(msg.member)) { // Check to only allow mentioning a staff if they mentioned the person mentioning them (if desired in the future)
+                    //     msg.mentions.members.forEach(
+                    //         (member, id) => mentioned.delete(id));
+                    //     return;
+                    // }
+
+                    // Remove the user who sent a message from the list of mentioned users
+                    mentioned.delete(msg.author.id);
+                })
+
+                // The message author mentioned someone that hadn't sent a message in the given amount of time
+                if (mentioned.size > 0) {
                     msg.channel.send(
                         `Hey ${msg.author.username}! Please don't tag others unless replying.`
                     );
-                    console.log(`Notified  ${msg.author.username} about pinging`)
+                    console.log(`Notified ${msg.author.username} about pinging`);
                 }
             })
             .catch(console.error);
