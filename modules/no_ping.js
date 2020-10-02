@@ -3,12 +3,12 @@ const data = require("../data.json");
 
 function filterRecent(currentDate) {
     return messages => {
-        return messages.filter(message => currentDate - message.createdTimestamp <= 216000); // 60 hours, 2.5 days
+        return messages.filter(message => currentDate - message.createdAt.getTime() <= 216000000); // 60 hours, 2.5 days
     };
 }
 
 function isStaff(member) {
-    return member.roles.some(role => data.staff_roles.indexOf(role.name) !== -1);
+    return member.roles.cache.some(role => data.staff_roles.indexOf(role.name) !== -1);
 }
 
 module.exports = function (client) {
@@ -30,7 +30,7 @@ module.exports = function (client) {
 
         // Get the map of people who were mentioned in the message
         const mentioned = msg.mentions.members
-            // .filter(member => !member.user.bot)        // Filter out bots, they don't have feelings
+            .filter(member => !member.user.bot)        // Filter out bots, they don't have feelings
             .filter(member => member.id !== author.id) // Filter out users mentioning themselves
             // Ignore mentions of users with '@me' in their nick (include mentions of users with no '@me' in nick)
             .filter(member => !member.nickname || member.nickname.toLowerCase().indexOf("@me") === -1);
@@ -39,8 +39,8 @@ module.exports = function (client) {
         if (mentioned.size === 0) return;
 
         const currentDate = new Date().getTime();
-        channel
-            .fetchMessages({before: msg.id, limit: 50})
+        channel.messages
+            .fetch({before: msg.id, limit: 50})
             .then(filterRecent(currentDate))
             .then(messages => {
                 messages.forEach(msg => {
