@@ -8,7 +8,7 @@ function filterRecent(currentDate) {
 }
 
 function isStaff(member) {
-    return member.roles.some(role => data.staff_roles.indexOf(role.name) !== -1);
+    return member.roles.cache.some(role => data.staff_roles.indexOf(role.name) !== -1);
 }
 
 module.exports = function (client) {
@@ -39,8 +39,8 @@ module.exports = function (client) {
         if (mentioned.size === 0) return;
 
         const currentDate = new Date().getTime();
-        channel
-            .fetchMessages({before: msg.id, limit: 50})
+        channel.messages
+            .fetch({before: msg.id, limit: 50})
             .then(filterRecent(currentDate))
             .then(messages => {
                 messages.forEach(msg => {
@@ -56,7 +56,9 @@ module.exports = function (client) {
 
                 // The message author mentioned someone that hadn't sent a message in the given amount of time
                 if (mentioned.size > 0) {
-                    //msg.channel.send(`Hey ${msg.author.username}! Please don't tag others unless replying.`);
+                    msg.channel.send(
+                        `Hey ${msg.author.username}! Please don't tag others unless replying.`
+                    );
                     console.log(`Notified ${msg.author.username} about pinging`);
                 }
             })
