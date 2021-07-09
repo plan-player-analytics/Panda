@@ -28,10 +28,27 @@ module.exports = function (client) {
         // Staff can mention
         if (isStaff(msg.member)) return;
 
+        const reference = msg.reference;
+        let referenceUserId;
+        if (reference !== null) {
+            const messageID = reference.messageID;
+            const messages = msg.channel.messages;
+
+            let message = messages.cache.get(messageID);
+            if (message === null) {
+                // not in cache, let's try fetching it
+                message = await messages.fetch(messageID);
+            }
+            if (message !== null) {
+                referenceUserId = message.author.id;
+            }
+        }
+
         // Get the map of people who were mentioned in the message
         const mentioned = msg.mentions.members
-            .filter(member => !member.user.bot)        // Filter out bots, they don't have feelings
-            .filter(member => member.id !== author.id) // Filter out users mentioning themselves
+            .filter(member => !member.user.bot)                 // Filter out bots, they don't have feelings
+            .filter(member => member.id !== author.id)          // Filter out users mentioning themselves
+            .filter(member => member.id === referenceUserId)    // Filter out the user that they replied to
             // Ignore mentions of users with '@me' in their nick (include mentions of users with no '@me' in nick)
             .filter(member => !member.nickname || member.nickname.toLowerCase().indexOf("@me") === -1);
 
