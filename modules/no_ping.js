@@ -48,7 +48,7 @@ module.exports = function (client) {
         const mentioned = msg.mentions.members
             .filter(member => !member.user.bot)                 // Filter out bots, they don't have feelings
             .filter(member => member.id !== author.id)          // Filter out users mentioning themselves
-            .filter(member => member.id === referenceUserId)    // Filter out the user that they replied to
+            .filter(member => member.id !== referenceUserId)    // Filter out the user that they replied to
             // Ignore mentions of users with '@me' in their nick (include mentions of users with no '@me' in nick)
             .filter(member => !member.nickname || member.nickname.toLowerCase().indexOf("@me") === -1);
 
