@@ -73,9 +73,9 @@ module.exports = function (client) {
 
                 // The message author mentioned someone that hadn't sent a message in the given amount of time
                 if (mentioned.size > 0) {
-                    // msg.channel.send(
-                    //     `Hey ${msg.author.username}! Please don't tag others unless replying.`
-                    // );
+                    msg.channel.send(
+                        `Hey ${msg.author.username}! Please don't tag others unless replying.`
+                    );
                     console.log(`Notified ${msg.author.username} about pinging`);
                 }
             })
