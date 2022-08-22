@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/plan-player-analytics/Panda#readme",
   "dependencies": {
-    "discord.js": "^14.1.2",
+    "discord.js": "^14.3.0",
     "mz": "^2.7.0",
     "npm": "^8.16.0"
   }
